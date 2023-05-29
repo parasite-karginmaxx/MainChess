@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace MainChess.ViewModels
 {
@@ -18,5 +19,7 @@ namespace MainChess.ViewModels
             set => Set(ref _title, value);
         }
         #endregion
+
+        
     }
 }
