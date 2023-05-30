@@ -53,6 +53,7 @@
             </Grid.ColumnDefinitions>
             
             <Image Source="/Resources/BoardPic.jpg" Grid.ColumnSpan="8" Grid.RowSpan="8" Stretch="Fill" IsEnabled="False" />
+            
             <res:WhiteBishop Grid.Row="6" Grid.Column="0"/>
             <res:WhiteBishop Grid.Row="6" Grid.Column="1"/>
             <res:WhiteBishop Grid.Row="6" Grid.Column="2"/>
