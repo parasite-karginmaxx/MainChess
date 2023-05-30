@@ -11,7 +11,7 @@ namespace MainChess.ViewModel
 {
     class MainWindowViewModel : BaseViewModel
     {
-        private Board _board = new Board();
+        private Board _board = new();
         private ICommand _newGameCommand;
         private ICommand _clearCommand;
         private ICommand _cellCommand;
@@ -42,7 +42,7 @@ namespace MainChess.ViewModel
         public ICommand CellCommand => _cellCommand ??= new RelayCommand(parameter =>
         {
             Cell cell = (Cell)parameter;
-            Cell activeCell = Board.FirstOrDefault(x => x.Active);
+            Cell? activeCell = Board.FirstOrDefault(x => x.Active);
             if (cell.State != State.Empty)
             {
                 if (!cell.Active && activeCell != null)

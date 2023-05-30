@@ -8,8 +8,10 @@
         xmlns:vm="clr-namespace:MainChess.ViewModel"
         mc:Ignorable="d"
         Title="MainWindow" SizeToContent="WidthAndHeight" ResizeMode="CanMinimize"
-        d:DataContext="{d:DesignInstance vm:MainWindowViewModel, IsDesignTimeCreatable=True}"
         SnapsToDevicePixels="True">
+    <Window.DataContext>
+        <vm:MainWindowViewModel/>
+    </Window.DataContext>
     <Window.Resources>
         <vm:CellColorConverter x:Key="CellColorConverter"/>
     </Window.Resources>
