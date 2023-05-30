@@ -41,7 +41,7 @@ public class BoardViewModel : BaseViewModel
             SelectPiece(square);
         else if (square.IsDestination)
         {
-            Move move = new(SourcePiece.Position, new(square.X, square.Y), null);
+            Move move = new(SourcePiece!.Position, new(square.X, square.Y), null);
             var isPromotion = SourcePiece.Type == Type.Pawn && square.Y == (SourcePiece.Color.IsWhite() ? 7 : 0);
             if (isPromotion)
                 ShowPromotions(move);
@@ -66,7 +66,7 @@ public class BoardViewModel : BaseViewModel
     {
         var selectedType = GetType(square);
         Move? move = selectedType is null ? null:
-            new(PromotionMove.Value.Source, PromotionMove.Value.Destination, selectedType);
+            new(PromotionMove!.Value.Source, PromotionMove.Value.Destination, selectedType);
         HidePromotions();
         if (move.HasValue)
             AddMove(move.Value);
@@ -75,7 +75,7 @@ public class BoardViewModel : BaseViewModel
     private Type? GetType(SquareViewModel square)
     {
         if (square.Piece is null) return null;
-        var promotions = GetPromations(square.Piece.Color, PromotionMove.Value.Destination.X);
+        var promotions = GetPromations(square.Piece.Color, PromotionMove!.Value.Destination.X);
         return promotions.FirstOrDefault(p => p.Position == square.Piece.Position)?.Type;
     }
 
@@ -108,7 +108,7 @@ public class BoardViewModel : BaseViewModel
         var sourceSquare = GetSquare(move.Source);
         var sourcePice = sourceSquare.Piece;
         var destinationSquare = GetSquare(move.Destination);
-        if (sourcePice.Type == Type.Pawn && move.Source.X != move.Destination.X && destinationSquare.Piece is null)
+        if (sourcePice!.Type == Type.Pawn && move.Source.X != move.Destination.X && destinationSquare.Piece is null)
         {
             int index = GetIndex(move.Destination.X, move.Source.Y);
             Squares[index].RemovePiece();
@@ -124,7 +124,7 @@ public class BoardViewModel : BaseViewModel
             var rookSquare = GetSquare(new(move.Destination.X == 2 ? 0 : 7, move.Destination.Y));
             var rookDesSquare = GetSquare(new(move.Destination.X == 2 ? 3 : 5, move.Destination.Y));
             var rook = rookSquare.Piece;
-            rookDesSquare.AddPiece(rook);
+            rookDesSquare.AddPiece(rook!);
             rookSquare.RemovePiece();
         }
     }
@@ -133,7 +133,7 @@ public class BoardViewModel : BaseViewModel
     private SquareViewModel GetSquare(Position position) => Squares[GetIndex(position.X, position.Y)];
     private void AddDestinations()
     {
-        foreach (var item in Board.GetDestinationsOf(SourcePiece.Position))
+        foreach (var item in Board.GetDestinationsOf(SourcePiece!.Position))
         {
             Destinations.Add(item);
             GetSquare(item).IsDestination = true;
@@ -150,7 +150,7 @@ public class BoardViewModel : BaseViewModel
         PromotionMove = move;
         var sourceSquare = GetSquare(move.Source);
         sourceSquare.IsSelected = false;
-        var promotions = GetPromations(sourceSquare.Piece.Color, move.Destination.X);
+        var promotions = GetPromations(sourceSquare.Piece!.Color, move.Destination.X);
         foreach (var promotion in promotions)
         {
             var square = GetSquare(promotion.Position);
@@ -162,9 +162,9 @@ public class BoardViewModel : BaseViewModel
     }
     private void HidePromotions()
     {
-        var sourceSquare = GetSquare(PromotionMove.Value.Source);
+        var sourceSquare = GetSquare(PromotionMove!.Value.Source);
         sourceSquare.IsSelected = true;
-        var promotions = GetPromations(sourceSquare.Piece.Color, PromotionMove.Value.Destination.X);
+        var promotions = GetPromations(sourceSquare.Piece!.Color, PromotionMove.Value.Destination.X);
         foreach (var item in promotions)
         {
             var square = GetSquare(item.Position);

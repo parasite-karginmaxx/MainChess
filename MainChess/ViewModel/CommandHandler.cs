@@ -13,5 +13,5 @@ internal class CommandHandler : ICommand
     public bool CanExecute(object? parameter) => true;
     public void Execute(object? parameter) => _action();
 
-    public event EventHandler CanExecuteChanged;
+    public event EventHandler? CanExecuteChanged;
 }

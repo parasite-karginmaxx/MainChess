@@ -123,7 +123,7 @@ public class Board : IBoard
         if (sourcePiece.Type == Type.Pawn && move.Destination == EnPassant)
         {
             var opponentPawn = GetPiece(new(EnPassant.Value.X, move.Source.Y));
-            Pieces.Remove(opponentPawn);
+            Pieces.Remove(opponentPawn!);
         }
         UpdateCastleMovedStates(sourcePiece);
         EnPassant = sourcePiece.Type == Type.Pawn && Math.Abs(move.Source.Y - move.Destination.Y) == 2

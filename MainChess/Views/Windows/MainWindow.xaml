@@ -4,12 +4,17 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MainChess"
-        xmlns:viewmodel="clr-namespace:MainChess.ViewModel" d:DataContext="{d:DesignInstance Type=viewmodel:MainWindowViewModel}"
+        xmlns:vm="clr-namespace:MainChess.ViewModel"
         mc:Ignorable="d"
-        Title="MainWindow" Height="840" Width="800">
+        Title="{Binding Title}" Height="840" Width="800">
+    <Window.DataContext>
+        <vm:MainWindowViewModel/>
+    </Window.DataContext>
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="boolToVisConverter" />
     </Window.Resources>
+    
+    
     <StackPanel>
         <Grid >
             <ItemsControl ItemsSource="{Binding Board.Squares}">

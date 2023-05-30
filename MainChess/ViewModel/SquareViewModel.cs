@@ -9,7 +9,7 @@ public class SquareViewModel : BaseViewModel
     public int X { get; init; }
     public int Y { get; init; }
     public IBoardPiece? Piece { get; private set; }
-    public void Promote(Model.Type type) => Piece.Promote(type);
+    public void Promote(Model.Type type) => Piece!.Promote(type);
     public ICommand ClickedCommand { get; }
 
     private Model.Color? Color = null;
