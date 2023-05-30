@@ -8,6 +8,16 @@ namespace MainChess.ViewModel
         private State _state;
         private bool _active;
 
+        public Cell(int horizontal, int vertical)
+        {
+            Position = new Position(horizontal, vertical);
+        }
+
+        /// <summary>
+        /// Позиция клетки на игровой доске описывается двумя натуральными числами (по горизонтали, по вертикали)
+        /// </summary>
+        public Position Position { get; set; }
+
         public State State
         {
             get => _state;

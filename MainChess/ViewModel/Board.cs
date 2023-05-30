@@ -17,9 +17,9 @@ namespace MainChess.ViewModel
         public Board()
         {
             _area = new Cell[8, 8];
-            for (int i = 0; i < _area.GetLength(0); i++)
-                for (int j = 0; j < _area.GetLength(1); j++)
-                    _area[i, j] = new Cell();
+            for (int vertical = 0; vertical < _area.GetLength(0); vertical++)
+                for (int horizontal = 0; horizontal < _area.GetLength(1); horizontal++)
+                    _area[vertical, horizontal] = new Cell(horizontal, _area.GetLength(0) - vertical - 1);
         }
 
         public IEnumerator<Cell> GetEnumerator() 

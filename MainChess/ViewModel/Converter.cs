@@ -4,7 +4,7 @@ using System.Windows.Data;
 
 namespace MainChess.ViewModel
 {
-    public class CellColorConverter : IValueConverter
+    public class Converter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
             => value is int v && (v % 2 == 0 ^ v / 8 % 2 == 0);
