@@ -52,10 +52,7 @@ namespace MainChess.Model
             for (int i = Position.Item1 + Direction.Item1, j = Position.Item2 + Direction.Item2; Condition(i, j); i += Direction.Item1, j += Direction.Item2)
             {
                 //если клетка не пустая, то сделать на нее ход нельзя
-                if (GameField[i, j] != " ")
-                {
-                    break;
-                }
+                if (GameField[i, j] != " ") break;
                 AvailableMovesList.Add((i, j));
             }
         }
@@ -93,17 +90,12 @@ namespace MainChess.Model
                 else//если уперлись во вражескую фигуру, то можем ее съесть
                       if (pieces.Contains(GameField[i, j]))
                 {
-
                     AvailableKillsList.Add((i, j));
                     break;
                 }
             }
         }
-        /// <summary>
-        /// Поиск вражеских фигур, которые можно съесть
-        /// </summary>
-        /// <param name="GameField">Игровое поле</param>
-        /// <returns>Список координат вражеских фигур для атаки</returns>
+
         public List<(int, int)> AvailableKills(string[,] GameField)
         {
             List<(int, int)> AvailableKillsList = new();
@@ -112,7 +104,6 @@ namespace MainChess.Model
             {
                 AvailableKillsInDirection(Directions[i], GameField, AvailableKillsList, Conditions[i]);
             }
-
             return AvailableKillsList;
         }
 

@@ -10,10 +10,6 @@ namespace MainChess.ViewModel
     {
         public int Vertical { get; set; }
         public int Horizontal { get; set; }
-        public override string ToString()
-        {
-            return $"{"ABCDEFGH"[Horizontal]}{Vertical + 1}";
-        }
         public Position(int Horizontal, int Vertical)
         {
             this.Horizontal = Horizontal;

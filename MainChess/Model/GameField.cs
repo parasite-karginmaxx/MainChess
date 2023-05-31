@@ -178,32 +178,13 @@ namespace MainChess.Model
             var CopiedPieces = new List<IPiece>();
             foreach (var piece in pieces)
             {
-                if (piece is Pawn)
-                {
-                    CopiedPieces.Add(new Pawn(piece.Color, piece.Position));
-                }
-                else if (piece is Rook)
-                {
-                    CopiedPieces.Add(new Rook(piece.Position, piece.Color));
-                }
-                else if (piece is Bishop)
-                {
-                    CopiedPieces.Add(new Bishop(piece.Position, piece.Color));
-                }
-                else if (piece is Knight)
-                {
-                    CopiedPieces.Add(new Knight(piece.Position, piece.Color));
-                }
-                else if (piece is Queen)
-                {
-                    CopiedPieces.Add(new Queen(piece.Color, piece.Position));
-                }
-                else if (piece is King)
-                {
-                    CopiedPieces.Add(new King(piece.Position, piece.Color));
-                }
+                if (piece is Pawn) CopiedPieces.Add(new Pawn(piece.Color, piece.Position));
+                else if (piece is Rook) CopiedPieces.Add(new Rook(piece.Position, piece.Color));
+                else if (piece is Bishop) CopiedPieces.Add(new Bishop(piece.Position, piece.Color));
+                else if (piece is Knight) CopiedPieces.Add(new Knight(piece.Position, piece.Color));
+                else if (piece is Queen) CopiedPieces.Add(new Queen(piece.Color, piece.Position));
+                else if (piece is King) CopiedPieces.Add(new King(piece.Position, piece.Color));
             }
-
             return CopiedPieces;
         }
 
@@ -215,22 +196,16 @@ namespace MainChess.Model
             {
                 for (int j = 0; j < 8; j++)
                 {
-                    if (cells[i, j].isFilled == false)
-                    {
-                        StringFromGameField[i, j] = " ";
-                    }
-                    else
-                    {
-                        StringFromGameField[i, j] = cells[i, j].Piece.ToString();
-                    }
+                    if (cells[i, j].isFilled == false) StringFromGameField[i, j] = " ";
+                    else StringFromGameField[i, j] = cells[i, j].Piece.ToString();
                 }
             }
             return StringFromGameField;
         }
-        //public string GetFENFromGamefield()
-        //{
-        //    return Fen.GetFenFromTheGameField();
-        //}
+        public string GetFENFromGamefield()
+        {
+            return Fen.GetFenFromTheGameField();
+        }
 
         /// <summary>
         /// Узнаем свободна ли клетка
@@ -252,12 +227,7 @@ namespace MainChess.Model
             {
                 for (int j = 0; j < 8; j++)
                 {
-                    if (this[i, j].isAtacked && this[i, j].Piece is King)
-                    {
-
-                        return true;
-
-                    }
+                    if (this[i, j].isAtacked && this[i, j].Piece is King) return true;
                 }
             }
             return false;
@@ -270,12 +240,11 @@ namespace MainChess.Model
             {
                 for (int j = 0; j < 8; j++)
                 {
-                    this[i, j].Piece = null;
+                    this[i, j].Piece = null!;
                     this[i, j].isFilled = false;
                     this[i, j].isAtacked = false;
                 }
             }
-
 
             foreach (var piece in pieces)
             {
@@ -299,9 +268,6 @@ namespace MainChess.Model
                     Field[i, j] = new Cell();
                 }
             }
-
         }
-
-
     }
 }

@@ -49,32 +49,17 @@ namespace MainChess.ViewModel
 
         public ICommand CellCommand => cellCommand ??= new RelayCommand(parameter =>
         {
-
             Cell CurrentCell = (Cell)parameter;
-
             Cell PreviousActiveCell = Board.FirstOrDefault(x => x.Active);
-
             List<(int, int)> ValidMoves = new();
-
             List<(int, int)> ValidAttacks = new();
-
 
             if (IsCheck())
             {
                 UpdateModel();
-
                 ChosePiece(CurrentCell, PreviousActiveCell);
-
-                //атака королем под шахом
-                KingAttackCheck(CurrentCell, ValidAttacks, PreviousActiveCell);
-
-                //ход королем под шахом
-                KingMoveCheck(CurrentCell, ValidMoves, PreviousActiveCell);
-
                 MoveInCheck(CurrentCell, ValidMoves, PreviousActiveCell);
-
                 AttackInCheck(CurrentCell, ValidMoves, PreviousActiveCell);
-
                 UpdateModel();
             }
             else
@@ -109,16 +94,12 @@ namespace MainChess.ViewModel
 
         }
 
-        public IEnumerable<char> Numbers => "87654321";
-
-        public IEnumerable<char> Letters => "ABCDEFGH";
-
         public ICommand NewGameCommand => newGameCommand ??= new RelayCommand(parameter =>
         {
             game = new Game();
             playerMoves = new ObservableCollection<string>();
             moves = new ObservableCollection<string>();
-            File.WriteAllText(pathOfFenFile, $"{DateTime.Now.ToString()}\n");
+            File.WriteAllText(pathOfFenFile, $"{DateTime.Now}\n");
             Fen.GameField = game.GameField;
 
             SetupBoard();
@@ -144,52 +125,6 @@ namespace MainChess.ViewModel
         {
             game.RemoveDeadPieces(pieces);
             game.GameField.Update(pieces, GetGameFieldString(), players[currentPlayer % 2].Color);
-        }
-
-        /// <summary>
-        /// Атака королем под шахом
-        /// </summary>
-        /// <param name="CurrentCell">Текущая клетка</param>
-        /// <param name="ValidAttacks">Доступные клетки для атаки</param>
-        /// <param name="PreviousActiveCell">Предыдущая клетка</param>
-        /// <returns></returns>
-        private void KingAttackCheck(Cell CurrentCell, List<(int, int)> ValidAttacks, Cell PreviousActiveCell)
-        {
-            if (CurrentCell.State != State.Empty && PreviousActiveCell != null && (PreviousActiveCell.State == State.BlackKing || PreviousActiveCell.State == State.WhiteKing))
-            {
-
-                CurrentCell.Active = true;
-                PreviousActiveCell.Active = false;
-                King king = (King)game.GameField[PreviousActiveCell.Position.Horizontal, PreviousActiveCell.Position.Vertical].Piece;
-
-                ValidAttacks = king.AvailableKills(game.GetGameField(pieces));
-
-                //Проверяем атакована ли клетка, на которую собирается пойти король
-                var AvailableAttacksForKingInCheck = ValidAttacks.FindAll(x => game.GameField.GetAtackStatus(pieces.Where(x => x.Color != king.Color).ToList(), x, GetGameFieldString()));
-                foreach (var removedMoves in AvailableAttacksForKingInCheck)
-                {
-                    ValidAttacks.Remove(removedMoves);
-                }
-                if (ValidAttacks.Contains((CurrentCell.Position.Horizontal, CurrentCell.Position.Vertical)))
-                {
-
-                    king.IsMoved = true;
-
-                    AttackView(CurrentCell, PreviousActiveCell);
-
-                    AttackModel(CurrentCell, PreviousActiveCell);
-
-                    ChangePlayer();
-
-                    MakeEnPassentUnavailableForAllPawns();
-
-
-                    //MainWindow.AddNewMove(CurrentCell.Position.ToString());
-                    moves.Add($"{players[currentPlayer].Color} {CurrentCell.Position}");
-                    PlayersMoves = moves;
-
-                }
-            }
         }
 
         private void AttackInCheck(Cell CurrentCell, List<(int, int)> ValidMoves, Cell PreviousActiveCell)
@@ -271,41 +206,41 @@ namespace MainChess.ViewModel
         /// <param name="ValidMoves">Доступные клетки для хода</param>
         /// <param name="PreviousActiveCell">Предыдущая клетка</param>
         /// <returns></returns>
-        private void KingMoveCheck(Cell CurrentCell, List<(int, int)> ValidMoves, Cell PreviousActiveCell)
-        {
-            if (CurrentCell.State == State.Empty && PreviousActiveCell != null && (PreviousActiveCell.State == State.WhiteKing || PreviousActiveCell.State == State.BlackKing))
-            {
+        //private void KingMoveCheck(Cell CurrentCell, List<(int, int)> ValidMoves, Cell PreviousActiveCell)
+        //{
+        //    if (CurrentCell.State == State.Empty && PreviousActiveCell != null && (PreviousActiveCell.State == State.WhiteKing || PreviousActiveCell.State == State.BlackKing))
+        //    {
 
-                CurrentCell.Active = true;
-                PreviousActiveCell.Active = false;
-                King king = (King)game.GameField[PreviousActiveCell.Position.Horizontal, PreviousActiveCell.Position.Vertical].Piece;
+        //        CurrentCell.Active = true;
+        //        PreviousActiveCell.Active = false;
+        //        King king = (King)game.GameField[PreviousActiveCell.Position.Horizontal, PreviousActiveCell.Position.Vertical].Piece;
 
-                ValidMoves = king.AvailableMoves(game.GetGameField(pieces));
-                var EnemyPieces = pieces.Where(x => x.Color != king.Color).ToList();
-                var AvailableMovesForKingInCheck = ValidMoves.FindAll(x => game.GameField.GetAtackStatus(EnemyPieces, x, GetGameFieldString()));
-                foreach (var removedMoves in AvailableMovesForKingInCheck)
-                {
-                    ValidMoves.Remove(removedMoves);
-                }
+        //        ValidMoves = king.AvailableMoves(game.GetGameField(pieces));
+        //        var EnemyPieces = pieces.Where(x => x.Color != king.Color).ToList();
+        //        var AvailableMovesForKingInCheck = ValidMoves.FindAll(x => game.GameField.GetAtackStatus(EnemyPieces, x, GetGameFieldString()));
+        //        foreach (var removedMoves in AvailableMovesForKingInCheck)
+        //        {
+        //            ValidMoves.Remove(removedMoves);
+        //        }
 
-                if (ValidMoves.Contains((CurrentCell.Position.Horizontal, CurrentCell.Position.Vertical)))
-                {
+        //        if (ValidMoves.Contains((CurrentCell.Position.Horizontal, CurrentCell.Position.Vertical)))
+        //        {
 
-                    king.IsMoved = true;
+        //            king.IsMoved = true;
 
-                    MoveView(CurrentCell, PreviousActiveCell);
+        //            MoveView(CurrentCell, PreviousActiveCell);
 
-                    MoveModel(CurrentCell, PreviousActiveCell);
+        //            MoveModel(CurrentCell, PreviousActiveCell);
 
-                    MakeEnPassentUnavailableForAllPawns();
+        //            MakeEnPassentUnavailableForAllPawns();
 
-                    AddCurrentMoveToListView(CurrentCell);
+        //            AddCurrentMoveToListView(CurrentCell);
 
-                    ChangePlayer();
+        //            ChangePlayer();
 
-                }
-            }
-        }
+        //        }
+        //    }
+        //}
         /// <summary>
         ///  После любого хода, все вражеские пешки нельзя взять на проходе по правилам.
         /// Для этого, после текущего хода устанавливаем у всех вражеских пешек соответсвующее значение
@@ -447,7 +382,6 @@ namespace MainChess.ViewModel
                 MyRooks = GetMyRooks(MyPieces);
 
                 IsCastlingAvailable(ValidMoves, ChosenPiece, out ShortCastleAvailble, out LongCastleAvailable, EnemyPieces, MyRooks);
-
             }
         }
 
@@ -457,12 +391,7 @@ namespace MainChess.ViewModel
             {
                 var EnemyPawn = EnemyPieces.Where(x => x.Position.Item2 == ChosenPiece.Position.Item2).Where(x => x is Pawn).Cast<Pawn>().ToList();
 
-                if (EnemyPawn != null)
-                {
-                    ValidMoves = AddAvailableEnPassentMoves(ValidMoves, ChosenPiece, EnemyPawn);
-
-                }
-
+                if (EnemyPawn != null) ValidMoves = AddAvailableEnPassentMoves(ValidMoves, ChosenPiece, EnemyPawn);
             }
 
             return ValidMoves;
@@ -494,16 +423,11 @@ namespace MainChess.ViewModel
         {
             if (CurrentCell.State != State.Empty && PreviousActiveCell != null)
             {
-
                 //если игрок захотел поменять выбранную фигуру
-                if (IsPlayerWantChoseOtherPiece(CurrentCell))
-                {
-                    ChoseOtherPiece(CurrentCell, PreviousActiveCell);
-
-                }
+                if (IsPlayerWantChoseOtherPiece(CurrentCell)) ChoseOtherPiece(CurrentCell, PreviousActiveCell);
+                
                 else//если игрок хочет съесть фигуру
                 {
-
                     IPiece ChosenPiece = game.GameField[PreviousActiveCell.Position.Horizontal, PreviousActiveCell.Position.Vertical].Piece;
                     ValidAttacks = ChosenPiece.AvailableKills(game.GetGameField(pieces));
                     if (ChosenPiece is King)
@@ -518,17 +442,13 @@ namespace MainChess.ViewModel
 
                     bool IsCurrentMoveInvalid = game.GameField.GetCheckStatusAfterMove(pieces, ChosenPiece, (CurrentCell.Position.Horizontal, CurrentCell.Position.Vertical), players[currentPlayer]);
 
-                    if (IsCurrentMoveInvalid)
-                    {
-                        ValidAttacks.Remove((CurrentCell.Position.Horizontal, CurrentCell.Position.Vertical));
-                    }
+                    if (IsCurrentMoveInvalid) ValidAttacks.Remove((CurrentCell.Position.Horizontal, CurrentCell.Position.Vertical));
 
                     if (IsAttackValid(CurrentCell, ValidAttacks))
                     {
                         AttackView(CurrentCell, PreviousActiveCell);
                         AttackModel(CurrentCell, PreviousActiveCell);
                         ChangePlayer();
-
 
                         moves.Add($"{ChosenPiece} {CurrentCell.Position}");
                         PlayersMoves = moves;
@@ -544,27 +464,15 @@ namespace MainChess.ViewModel
         private void ChangePlayer()
         {
             currentPlayer++;
-            if (currentPlayer >= 2)
-            {
-                currentPlayer -= 2;
-            }
+            if (currentPlayer >= 2) currentPlayer -= 2; 
             Fen.CurrentPlayer = currentPlayer;
         }
 
         private static void ChangePieceProperties(Cell CurrentCell, IPiece ChosenPiece)
         {
-            if (IfPawnMoved2StepsForward(CurrentCell, ChosenPiece))
-            {
-                ((Pawn)ChosenPiece).EnPassantAvailable = true;
-            }
-            if (ChosenPiece is King king)
-            {
-                king.IsMoved = true;
-            }
-            if (ChosenPiece is Rook Rook)
-            {
-                Rook.IsMoved = true;
-            }
+            if (IfPawnMoved2StepsForward(CurrentCell, ChosenPiece)) ((Pawn)ChosenPiece).EnPassantAvailable = true;
+            if (ChosenPiece is King king) king.IsMoved = true;
+            if (ChosenPiece is Rook Rook) Rook.IsMoved = true;
         }
 
         private static bool IsMoveValid(Cell CurrentCell, List<(int, int)> ValidMoves)

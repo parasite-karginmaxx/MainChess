@@ -8,9 +8,6 @@ namespace MainChess.Model
 {
     public class Player
     {
-        /// <summary>
-        /// Имя игрока
-        /// </summary>
         public string Name { get; set; }
         /// <summary>
         /// Цвет фигур

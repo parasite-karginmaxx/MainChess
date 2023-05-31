@@ -279,9 +279,6 @@ namespace MainChess.Model
             AvailableKingMoves.AddRange(currentPlayer.Pieces[currentPlayer.Pieces.Count - 1].AvailableKills(GameField));
 
             var ValidMoves = AvailableKingMoves?.Where(move => !this.GameField.GetAtackStatus(Pieces, move, GameField)).ToList();
-
-
-
             int counter = 1;
             if (ValidMoves.Count() != 0)
             {
@@ -309,9 +306,6 @@ namespace MainChess.Model
 
                 isGameOver = true;
             }
-
-
-
         }
 
         public void RemoveDeadPieces(List<IPiece> pieces)
@@ -321,26 +315,26 @@ namespace MainChess.Model
         /// <summary>
         /// Один ход (Отрисовка доски, изменение позицицй фигур, выбор хода и т.д.)
         /// </summary>
-        void GameProcess()
-        {
-            //получаем фигуры на доске, у каждой фигуры записаны текущее местоположение на доске
-            GameFieldString = GetGameField(Pieces);
+        //void GameProcess()
+        //{
+        //    //получаем фигуры на доске, у каждой фигуры записаны текущее местоположение на доске
+        //    GameFieldString = GetGameField(Pieces);
 
-            //отрисовываем доску
-            view.Visualize(GameFieldString, CurrentPlayer);
+        //    //отрисовываем доску
+        //    view.Visualize(GameFieldString, CurrentPlayer);
 
-            //ход 
-            ConsoleMove(players[CurrentPlayer % 2], GameFieldString, Pieces);
+        //    //ход 
+        //    ConsoleMove(players[CurrentPlayer % 2], GameFieldString, Pieces);
 
-            RemoveDeadPieces(Pieces);
-            Console.Clear();
-            GameFieldString = GetGameField(Pieces);
-            view.Visualize(GameFieldString, CurrentPlayer);
-            view.Show("Любую клавишу для продолжения...");
-            Console.ReadLine();
-            //меняем текущего игрока
-            CurrentPlayer++;
-        }
+        //    RemoveDeadPieces(Pieces);
+        //    Console.Clear();
+        //    GameFieldString = GetGameField(Pieces);
+        //    view.Visualize(GameFieldString, CurrentPlayer);
+        //    view.Show("Любую клавишу для продолжения...");
+        //    Console.ReadLine();
+        //    //меняем текущего игрока
+        //    CurrentPlayer++;
+        //}
 
         public Game()
         {

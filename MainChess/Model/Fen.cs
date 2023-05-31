@@ -30,23 +30,16 @@ namespace MainChess.Model
                     if (GameField[col, row].isFilled)
                     {
                         numberOfEmptyCells = 0;
-
                         fenStr.Append(GameField[col, row].Piece);
                     }
                     else
                     {
                         numberOfEmptyCells++;
-
-                        if (col == 7 || GameField[col + 1, row].isFilled)
-                        {
-                            fenStr.Append($"{numberOfEmptyCells}");
-                        }
-
+                        if (col == 7 || GameField[col + 1, row].isFilled) fenStr.Append($"{numberOfEmptyCells}");
                     }
 
                 }
                 NextLine(fenStr, row);
-
             }
             AddCurrentPlayerStatus(fenStr);
 
@@ -55,22 +48,13 @@ namespace MainChess.Model
 
         private static void NextLine(StringBuilder fenStr, int i)
         {
-            if (i < 7)
-            {
-                fenStr.Append("/");
-            }
+            if (i < 7) fenStr.Append("/");
         }
 
         private static void AddCurrentPlayerStatus(StringBuilder fenStr)
         {
-            if (CurrentPlayer == 0)
-            {
-                fenStr.Append(" w");
-            }
-            else
-            {
-                fenStr.Append(" b");
-            }
+            if (CurrentPlayer == 0) fenStr.Append(" w"); 
+            else fenStr.Append(" b"); 
         }
     }
 }

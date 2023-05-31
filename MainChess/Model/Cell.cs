@@ -18,14 +18,8 @@ namespace MainChess.Model
             get => piece;
             set
             {
-                if (isFilled)
-                {
-                    piece = value;
-                }
-                else
-                {
-                    piece = null;
-                }
+                if (isFilled) piece = value;
+                else piece = null!;
             }
         }
 
